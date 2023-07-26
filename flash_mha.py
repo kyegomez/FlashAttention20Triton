@@ -11,6 +11,6 @@ sm_scale=1.3
 output = attention(q, k, v, casual, sm_scale)
 
 #backward pass
-result = output.backward(torch.ones_like(output)).shape
+result = output.backward(torch.ones_like(output))
 
 print(f'Result: {result}')
