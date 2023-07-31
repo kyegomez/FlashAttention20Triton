@@ -2,37 +2,33 @@ import time
 import torch
 import pytest
 
-import fairscale
-from flashtriton.lama import ModelArgs, Attention
-
-import torch.distributed as dist
-
-
-# Initialize PyTorch distributed backend
-dist.init_process_group(backend='nccl')
-
-# Initialize model parallelism
-fairscale.nn.model_parallel.initialize_model_parallel(1)
+from flashtriton.flash_torch import FlashAttention
 
 # Model Arguments
-args = ModelArgs(dim=512, n_heads=8, n_kv_heads=4, max_batch_size=64, max_seq_len=1024)
+args = {
+    "dim": 512, 
+    "heads": 8, 
+    "dim_head": 64, 
+    "causal": False, 
+    "q_bucket_size": 512, 
+    "k_bucket_size": 1024, 
+    "parallel": False, 
+    "mixed_precision": False
+}
 
 # Initialize model
-model = Attention(args)
+model = FlashAttention(**args)
 model.cuda()
 
 # Generate some input data
-x = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
-start_pos = 0
-freqs_cis = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
-mask = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
+x = torch.randn(64, 1024, args['dim']).cuda()
 
-def test_attention_forward():
+def test_flash_attention_forward():
     # Start timing
     start_time = time.time()
 
     # Run method
-    model.forward(x, start_pos, freqs_cis, mask)
+    model(x)
 
     # End timing
     end_time = time.time()
@@ -40,21 +36,23 @@ def test_attention_forward():
     # Print execution time
     print(f'Execution time for sequence length 1024: {end_time - start_time} milliseconds')
 
-def test_attention_forward_scaling():
+def test_flash_attention_forward_scaling():
     # Modify sequence length and run benchmark
-    args.max_seq_len = 16000
-    x = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
-    freqs_cis = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
-    mask = torch.randn(args.max_batch_size, args.max_seq_len, args.dim).cuda()
+    x = torch.randn(64, 16000, args['dim']).cuda()
 
     # Start timing
     start_time = time.time()
 
     # Run method
-    model.forward(x, start_pos, freqs_cis, mask)
+    model(x)
 
     # End timing
     end_time = time.time()
 
     # Print execution time
     print(f'Execution time for sequence length 16000: {end_time - start_time} milliseconds')
+
+# Run tests
+if __name__ == "__main__":
+    test_flash_attention_forward()
+    test_flash_attention_forward_scaling()
