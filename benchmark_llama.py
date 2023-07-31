@@ -1,8 +1,6 @@
 import torch
 import math
-
 import pytest
-from pytest_benchmark import pytestmark
 from flashtriton.lama import ModelArgs, Attention
 
 # Model Arguments
