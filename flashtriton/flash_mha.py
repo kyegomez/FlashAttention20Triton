@@ -1,5 +1,5 @@
 import torch
-from attention import attention
+from flashtriton.attention import attention
 
 
 
