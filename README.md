@@ -11,6 +11,22 @@ python3 -m pip install -U --index-url https://aiinfra.pkgs.visualstudio.com/Publ
 python3 attention.py
 ```
 
+# Results:
+```
+Flash Attention 2.0 triton vs torch
+https://github.com/kyegomez/FlashAttention20Triton
+
+Torch
+-------
+length 1024: 0.32473278045654297 seconds
+length 16000: 8.895928621292114 seconds
+-----------------
+TRITON
+N_CTX     Triton
+0   1024.0  28.783796,ms
+4  16384.0  46.376728 ms
+```
+
 
 # Code
 
