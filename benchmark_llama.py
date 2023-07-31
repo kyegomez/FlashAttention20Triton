@@ -5,8 +5,14 @@ import pytest
 import fairscale
 from flashtriton.lama import ModelArgs, Attention
 
-fairscale.nn.model_parallel.initialize_model_parallel(1)
+import torch.distributed as dist
 
+
+# Initialize PyTorch distributed backend
+dist.init_process_group(backend='nccl')
+
+# Initialize model parallelism
+fairscale.nn.model_parallel.initialize_model_parallel(1)
 
 # Model Arguments
 args = ModelArgs(dim=512, n_heads=8, n_kv_heads=4, max_batch_size=64, max_seq_len=1024)
