@@ -1,7 +1,12 @@
 import time
 import torch
 import pytest
+
+import fairscale
 from flashtriton.lama import ModelArgs, Attention
+
+fairscale.nn.model_parallel.initialize_model_parallel(1)
+
 
 # Model Arguments
 args = ModelArgs(dim=512, n_heads=8, n_kv_heads=4, max_batch_size=64, max_seq_len=1024)

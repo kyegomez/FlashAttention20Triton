@@ -3,3 +3,4 @@ torch
 --index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/Triton-Nightly/pypi/simple/ triton-nightly
 # !pip install flash-attn>
 pytest
+fairscale
