@@ -34,7 +34,7 @@ def test_flash_attention_forward():
     end_time = time.time()
 
     # Print execution time
-    print(f'Execution time for sequence length 1024: {end_time - start_time} milliseconds')
+    print(f'Execution time for sequence length 1024: {end_time - start_time} seconds')
 
 def test_flash_attention_forward_scaling():
     # Modify sequence length and run benchmark
@@ -50,7 +50,7 @@ def test_flash_attention_forward_scaling():
     end_time = time.time()
 
     # Print execution time
-    print(f'Execution time for sequence length 16000: {end_time - start_time} milliseconds')
+    print(f'Execution time for sequence length 16000: {end_time - start_time} seconds')
 
 # Run tests
 if __name__ == "__main__":
