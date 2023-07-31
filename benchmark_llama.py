@@ -1,7 +1,7 @@
 import time
 import torch
 import pytest
-from model import ModelArgs, Attention
+from flashtriton.lama import ModelArgs, Attention
 
 # Model Arguments
 args = ModelArgs(dim=512, n_heads=8, n_kv_heads=4, max_batch_size=64, max_seq_len=1024)
